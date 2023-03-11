@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include <stdio.h> //proporciona funciones para entrada/salida estándar
+#include <stdlib.h> //proporciona funciones para convertir cadenas de caracteres a números
+#include <string.h>
 
 
 //administrar los resultados de los partidos de un campeonatod e futbol
@@ -32,8 +32,14 @@ struct mixto {
     char nombreEquipo[75];
 };
 
-void cargarEquipos();
+
+
+void cargarEquipos();//inicializando las funcciones
+
 void registrarResultado();
+int identificadorUnicoPartidos();//declarar las funciones
+void ingresoDatosDelPartido();
+
 void corregirResultado();
 void mostrarTablaGoles();
 void mostrarTablaPosiciones();
@@ -45,11 +51,16 @@ void menuPrincipal();
 void codigoEquipos();
 
 int numeroDeEquipos;
-int numeroMaximoEquipos=12;
+// int numeroMaximoEquipos=12;
+struct mixto vector[12];
+
 
 int opcionNuevoEquipo;
 
 int registroResultadoEquipo;
+int partidoNumero=0;
+int registroResultadoEquipoA;
+int registroResultadoEquipoB;
     
 
     
@@ -58,7 +69,7 @@ int main() {
 
     while (salir <=1)
     {
-        printf("El super programa de Rogger\n");
+        printf("\nEl super programa de Rogger\n");
         printf("1. Cargar Equipos\n") ;
         printf("2. Registrar un resultado\n");
         printf("3. corregir un resultado\n");
@@ -73,7 +84,7 @@ int main() {
         switch (opcion)
         {
         case 1:
-            cargarEquipos();
+            cargarEquipos(); //llama a la funcion cargar equipos
             break;
         case 2:
             registrarResultado();
@@ -97,29 +108,15 @@ int main() {
             ingreseCorrectamente();
             break;
         }
-
-        
-
-
     }
-    
-
-
     return 0;
 }
 
-
-// printf("Ingrese una cadena de caracteres: ");
-//     fgets(cadena, 100, stdin);
-//     printf("La cadena ingresada es: %s\n", cadena);
-
-void cargarEquipos(){
-
-    
-    
+void cargarEquipos(){//funcion que carga los equipos    
     if (numeroDeEquipos <2 ){
         minimoDeEquipos();
         codigoEquipos();
+        //asignar valores por default
     }
     
     opcionNuevoEquipo =1;
@@ -128,7 +125,7 @@ void cargarEquipos(){
         printf("Desea agregar un nuevo equipo? Digite el numero\n");
         printf("1. Si\n");
         printf("2. No\n");
-        printf("3. Regresar al menú principal\n");
+        printf("3. Regresar al menu principal\n");
         scanf("%d", &opcionNuevoEquipo);
         printf("Ha escogido la opcion %d \n", opcionNuevoEquipo);
 
@@ -152,33 +149,27 @@ void cargarEquipos(){
         
         
     }
-    
-    
+    return;    
 }
-
-void minimoDeEquipos(){
-    printf("Ingrese el nombre del equipo #1: ");
-    scanf("%s", cadena);
-    printf("El equipo ingresado es: %s \n", cadena);
-    // if (strlen(cadena) == 0)
-    // {
-    //     strcpy(cadena, "Barcelona");
-    // }
-    strcpy(equipos[0],cadena);
-    printf(equipos[0]);
-    printf("\n");
-
-    printf("Ingrese el nombre del equipo #2: ");
-    scanf("%s", cadena);
-    printf("El equipo ingresado es: %s \n", cadena);
-    strcpy(equipos[1],cadena);
-    printf(equipos[1]);
-    printf("\n");
-
-    numeroDeEquipos = 2;
+void minimoDeEquipos(){//esta funcion se ejecuta siempre que el numero de equipos sea menor a 2
+    // printf("Ingrese el nombre del equipo #1: ");
+    // scanf("%s", cadena);
+    // printf("El equipo ingresado es: %s \n", cadena);
+    // strcpy(equipos[0],cadena);
+    // printf(equipos[0]);
+    // printf("\n");
+    // printf("Ingrese el nombre del equipo #2: ");
+    // scanf("%s", cadena);
+    // printf("El equipo ingresado es: %s \n", cadena);
+    // strcpy(equipos[1],cadena);
+    // printf(equipos[1]);
+    // printf("\n");
+    crearEquipo();
+    crearEquipo();
+    //numeroDeEquipos = 2;
+    return;
 }
-
-void crearEquipo(){
+void crearEquipo(){ //funcion para crear equipo
     
     printf("Ingrese el nombre del equipo #%d: ", numeroDeEquipos+1);
     scanf("%s", cadena);
@@ -188,44 +179,76 @@ void crearEquipo(){
     printf("\n");
     numeroDeEquipos += 1;
     codigoEquipos();
-    
-    
+    return ;
 }
+void codigoEquipos(){ //funcion para asignarle un codigo al equipo
 
-void codigoEquipos(){
-
-    struct mixto vector[numeroMaximoEquipos];
     printf("Equipos \n");
+    
     for (int  i = 0; i < numeroDeEquipos; i++)
     {
         vector[i].codigo = i+1;
-        strcpy(vector[i].nombreEquipo,equipos[i]);
+        strcpy(vector[i].nombreEquipo,equipos[i]);//copiamos la informacion dentro del vector
         printf("%d %s \n", vector[i].codigo, vector[i].nombreEquipo);
     }
-    
+    return ;
     // struct mixto vector[numeroMaximoEquipos] = {{1, equipos[0]}, {2, equipos[1]}, {3, equipos[2]}, {4, equipos[3]}, {5, equipos[4]}};
 }
 
 void registrarResultado(){
-    printf("Ingrese codigo del primer equipo\n");
-    scanf("%d", &registroResultadoEquipo);
-    // printf("Ha escogido la opcion %d \n", registroResultadoEquipo);
-    //tenemos que ingresar un identificador unico de partidos, tenemos que almacenar en una matriz numero de partido, local, goles, visitante, goles
+
+    identificadorUnicoPartidos();//declarar las funciones
+    ingresoDatosDelPartido(partidoNumero);
+    
+    
 }
+
+int identificadorUnicoPartidos(){
+    partidoNumero += 1;
+    return partidoNumero;
+}
+void ingresoDatosDelPartido(int partidoNumeroVar){
+    int golesEquipoA =0;
+    int golesEquipoB =0;
+    printf("El numero de partido ingresado es el N %d \n", partidoNumeroVar);
+    printf("Ingrese codigo del primer equipo\n");
+    scanf("%d", &registroResultadoEquipoA);
+    printf("Ha escogido al equipo %d %s\n", vector[registroResultadoEquipoA - 1 ].codigo, vector[registroResultadoEquipoA - 1 ].nombreEquipo);
+    printf("Ingrese codigo del segundo equipo\n");
+    scanf("%d", &registroResultadoEquipoB);
+    printf("Ha escogido al equipo %d %s\n", vector[registroResultadoEquipoB-1].codigo, vector[registroResultadoEquipoB-1].nombreEquipo);
+
+    printf("Ingrese el numero de goles del  %s\n", vector[registroResultadoEquipoA - 1 ].nombreEquipo);
+    scanf("%d", &golesEquipoA);
+    printf("Ingrese el numero de goles del  %s\n", vector[registroResultadoEquipoB-1].nombreEquipo);
+    scanf("%d", &golesEquipoB);
+
+    printf("El partido N%d ha sido registrado: %s %d vs %d %s\n", partidoNumeroVar, vector[registroResultadoEquipoA - 1 ].nombreEquipo, golesEquipoA, golesEquipoB,  vector[registroResultadoEquipoB-1].nombreEquipo);
+
+    if ((golesEquipoA == 5 && golesEquipoB == 0) || (golesEquipoB == 5 && golesEquipoA == 0)){
+        printf("5 a 0 koketa te acuerdas y te duele\n");
+    }
+
+    //llamar a una funcion para  crear tablas
+
+}
+
+
 void corregirResultado(){}
 void mostrarTablaGoles(){}
 
-void mostrarTablaPosiciones(){
+void mostrarTablaPosiciones(){ //mostrar la tabla de posiciones
 
     for (int i = 0; i < numeroDeEquipos; i++) {
         printf("%s ", equipos[i]);
-        printf("\t");
-        for( int j=0; j<numeroDeEquipos ;j++){
-            printf("%s ", equipos[j]);
-            printf("\t");
-        }
         printf("\n");
+        // for( int j=0; j<numeroDeEquipos ;j++){
+        //     printf("%s ", equipos[j]);
+        //     printf("\t");
+        // }
+        // printf("\n");
     }
+    
     
 }
 
